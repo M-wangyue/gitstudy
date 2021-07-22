@@ -13,3 +13,6 @@ var $_GET = (function(){
         return {};
     }
 })();
+var getTime= $_GET['getTime'];
+var serial= $_GET['serial'];
+console.log(getTime);

@@ -4,31 +4,24 @@
     {{message}}
     <h1 v-text="str"></h1>
     <input type="text" v-model="ids">{{ids}}
-    <button @click="get">点击</button>
 </div>
 <script>
-    var m=new Vue({
-        el:"#vm",
-        data:{
-            message:"Tom",
-            str:"Hello",
-            ids:"填入数据"
-        },
-        methods:{
-            get:function () {
-                axios.get("/Demo/ajax/ajaxs",{
-                    params:{id:m.ids}
-
-                })
-                    .then(function (response) {
-                        //错误this指向window,无法得到数据
-                        m.str=response.data;
-                        this.message=response.data;
-                        console.log(response.data)
-                    })
-            }
-        }
-    });
-
+axios.get('/api/strain_latest')
+  .then(function (response) {
+    console.log(response);
+  })
+  .catch(function (error) {
+    console.log(error);
+  });
+  url: '/api/strain_latest'
+  baseURL: 'http://139.9.157.89:8088/doc.html#'
+  axios.get('/api/strain_latest')
+  .then(function(response) {
+    console.log(response.data);
+    console.log(response.status);
+    console.log(response.statusText);
+    console.log(response.headers);
+    console.log(response.config);
+  });
 </script>
 </body>
