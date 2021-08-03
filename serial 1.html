@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>axios使用请求数据</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="echarts.min.js"></script>
+</head>
+<body>
+    <div id="main" style="width: 1600px;height:1200px;"></div>
+   <script type="module">
+    /*   aget=()=>{
+          axios.get('http://139.9.157.89:8088/api/strain_latest').then(res=>{
+              console.log(res.data)
+          }).catch(srr=>{
+              console.log(err);
+          })
+      }
+      const axios = require('axios');
+   */
+  
+
+      axios.get('http://139.9.157.89:8088/api/strain_latest',{
+      params:{
+          pageSize: 2200
+      }
+  
+  })
+  
+  .then(function(response){
+ /*   console.log(response); */
+   const DATA = response.data.data;
+ /*   console.log(DATA); */
+  /*  console.log(DATA[0].serial); */
+
+
+
+              /* 传感器遍历 */
+              var data_zonghe = new Array();
+              /* data_zonghe[0]=['时间','频率','传感器编号'] */
+
+    for (let w = 0; w < 33; w++) {
+        
+        var data_serialw = new Array();
+      var j = 0;
+      for (let i = 0; i< DATA.length; i++) 
+      {        
+          if (DATA[i].serial==w) {
+            data_serialw[j]=DATA[i];
+            j++;
+          }
+     
+      }
+     /*  console.log(data_serialw) */
+
+      var dataw= new Array();
+      for(var i = 0; i < data_serialw.length; i++) {
+						dataw[i] = new Array();}
+        dataw[0]=['时间','频率','传感器编号']
+      for (let i = 0; i <data_serialw.length; i++) {
+          
+          dataw[i+1]=[data_serialw[i].getTime,data_serialw[i].frequency,w];
+            
+        }
+        console.log(dataw)
+         if (w!==9) {
+            data_zonghe[w]=dataw;
+        } else {
+            data_zonghe[w]=[];
+        } 
+        
+        /* data_zonghe[w]=dataw; */
+    }
+    console.log(data_zonghe)
+              /* var data_serial30 = new Array();
+      var j = 0;
+      for (let i = 0; i< DATA.length; i++) 
+      {        
+          if (DATA[i].serial=='30') {
+            data_serial30[j]=DATA[i];
+            j++;
+          }
+     
+      }
+      console.log(data_serial30)
+
+      var data30= new Array();
+      for(var i = 0; i < data_serial30.length; i++) {
+						data30[i] = new Array();}
+      for (let i = 0; i <data_serial30.length; i++) {
+          
+          data30[i]=[data_serial30[i].getTime,data_serial30[i].frequency];
+            
+        }
+        console.log(data30)
+        草稿
+ */
+
+/* import * as echarts from 'echarts'; */
+      var myChart = echarts.init(document.getElementById('main'));
+       
+        var array_2=[];
+        for (let i = 0; i < 32; i++) {
+            var items={
+                id:i,
+               source:data_zonghe[i]
+            };
+            array_2.push(items);
+        } 
+// console.log(array_2)
+        var array=[];
+        for (let i = 0; i < 32; i++) {
+            var items={
+                type: 'line',
+                datasetId:i,
+             emphasis: {
+                focus: 'series'
+            },
+                encode: {
+                  x: '时间',
+                  y: '频率',
+                  label: ['传感器编号', '频率'],
+                  tooltip: ['传感器编号','时间','频率'],
+                     },
+   
+            };
+            array.push(items);
+        } 
+// console.log(array)
+
+         var option = {
+    title:{
+        text:'传感器数据汇总图'
+    },
+    dataset:array_2,
+    tooltip: {
+            // order: 'valueDesc',
+            trigger: 'item'
+        },
+    xAxis: {
+        name: '时间',
+        type: 'time',
+        splitLine: {
+                                    show: true
+                                },
+                                /* //开始时间
+                                min: new Date("2021-06-18 15:15:00"),
+                                //结束时间
+                                max: new Date("2021-06-16 12:00:00"), */
+                                scale: true,
+                                axisLabel: {
+                             /*        interale: 0, */
+                                    interval: 0,
+                                    rotate: 30,
+                                    grid: {
+                                      left: '20%',
+                                       bottom:'20%'
+                                         },
+                                 formatter: function (value) {
+                                        var t_date = new Date(value);
+                                        return [t_date.getFullYear(), t_date.getMonth(), t_date.getDate()].join('-') + " "
+                                            + [t_date.getHours(), t_date.getMinutes(),t_date.getSeconds()].join(':');
+
+                                    } 
+                                }
+    },
+    yAxis: {
+        scale: true,
+        name: '频率',
+        type: 'value',
+ 
+    },
+    series: array
+
+};
+
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);  
+
+  
+    
+
+  })
+  
+  .catch(function(error){
+      console.log(error)
+     });
+
+ 
+  
+  </script>
+ 
+</body>
+</html>

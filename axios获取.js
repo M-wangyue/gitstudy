@@ -1,8 +1,18 @@
-在main.js中引用
-import Axios from 'axios'
-import qs from 'qs'
-//跨域post实例；用到qs组件来避开ajax信使请求；并兼容安卓；
-Vue.prototype.$qs = qs;
-// 给对象一个原型挂载属性（很重要）
-Vue.prototype.$axios = Axios;
-Axios.defaults.baseURL = 'http://139.9.157.89:8088/doc.html#';
+const axios = require('axios');
+
+axios.get('http://139.9.157.89:8088/api/strain_latest',{
+    params:{
+        pageSize: 5
+    }
+
+})
+.then(function(response){
+ console.log('---------------成功-------------');
+ console.log(response)
+})
+
+.catch(function(error){
+    console.log('---------------error-----------------');
+    console.log(error)
+   });
+   

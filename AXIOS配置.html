@@ -6,15 +6,86 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>axios使用请求数据</title>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="echarts.min.js"></script>
 </head>
 <body>
-   <button onclick="aget()">aget</button>
+    <div id="main" style="width: 600px;height:400px;"></div>
+   <script type="text/javascript">
+    /*   aget=()=>{
+          axios.get('http://139.9.157.89:8088/api/strain_latest').then(res=>{
+              console.log(res.data)
+          }).catch(srr=>{
+              console.log(err);
+          })
+      }
+      const axios = require('axios');
+   */
+  
+
+      axios.get('http://139.9.157.89:8088/api/strain_latest',{
+      params:{
+          pageSize: 200
+      }
+  
+  })
+  
+  .then(function(response){
+   console.log(response);
+   const DATA = response.data.data;
+   console.log(DATA);
+   
+      var gettime = new Array();
+      for (let i = 0; i < DATA.length; i++) {
+          
+          gettime[i]=DATA[i].getTime;
+          
+      }
+      console.log(gettime)
+
+      var frequency = new Array();
+      for (let i = 0; i < DATA.length; i++) {
+          
+        frequency[i]=DATA[i].frequency;
+          
+      }
+      console.log(frequency)
+
+    
+      var myChart = echarts.init(document.getElementById('main'));
+
+        var option = {
+            title: {
+                text: '传感器数据图'
+            },
+            xAxis: {
+                type: 'value',
+             
+            },
+            yAxis: {
+                type:'value'
+            },
+            series: [{
+                name: '传感器',
+                type: 'line',
+                smooth:'true',
+                data: gettime
+            } 
+            
+        ]
+        };
+
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);  
+
+  })
+  
+  .catch(function(error){
+      console.log(error)
+     });
+
+ 
+  
+  </script>
+ 
 </body>
 </html>
-<script>
-    aget=()=>{
-        axios.get('/api/strain_latest').then(res=>{
-            console.log(res.data)
-        }).catch(srr=>{console.log(err);})
-    }
-</script>
